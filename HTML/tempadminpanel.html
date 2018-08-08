@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>We Got You | Dashboard</title>
+  <!-- Bootstrap core CSS-->  <link href="css/custom.css" rel="stylesheet">
+
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom fonts for this template-->
+  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+   <!-- Page level plugin CSS-->
+   <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+ 
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin.css" rel="stylesheet">
+</head>
+
+<body class="fixed-nav sticky-footer" id="page-top" onload="startTime()">
+  <!-- Navigation-->
+<div id="dashboardToggle" hidden >
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark  fixed-top" id="mainNav">
+    <a class="navbar-brand" style="color: #f94808" href="dashboard.html"><b>Dashboard</b> | wegotyou.in</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav collapsed" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="#page-top">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Dashboard</span>
+          </a>
+        </li>
+
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="requests">
+          <a class="nav-link" href="#notificationTable">
+            <i class="fa fa-fw fa-table"></i>
+            <span class="nav-link-text">Notification Table</span>
+          </a>
+        </li>
+        <!-- <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Profile">
+          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#profile" data-parent="#exampleAccordion">
+            <i class="fa fa-fw fa-user"></i>
+            <span class="nav-link-text">Profile</span>
+          </a>
+          <ul class="sidenav-second-level collapse" id="profile">
+            <li>
+              <a href="profile.html.html"><i class="fa fa-address-card"></i> View profile</a>
+            </li>
+            <li>
+              <a href="changepassword.html"><i class="fa fa-pencil"></i> Change Password</a>
+            </li>
+          </ul>
+        </li> -->
+
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Logout">
+          <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+            <i class="fa fa-fw fa-sign-out"></i>
+            <span class="nav-link-text">logout</span>
+          </a>
+        </li>
+
+      </ul>
+      <ul class="navbar-nav sidenav-toggler">
+        <li class="nav-item">
+          <a class="nav-link text-center" id="sidenavToggler">
+            <i class="fa fa-fw fa-angle-left"></i>
+          </a>
+        </li>
+      </ul>
+
+
+      <ul class="navbar-nav">
+
+          <li class="nav-item">
+              <span class="nav-link"><i class="fa fa-eye"></i> Seen <span  class="badge badge-pill badge-success"id="seenRequests"> 0 </span></span>
+          </li>
+         
+          <li class="nav-item">
+              <span class="nav-link" ><i class="fa fa-list-ol"></i>  Total <span  class="badge badge-pill badge-success" id="totalRequests"> 0 </span></span>
+          </li>
+
+        <li class="nav-item">
+          <a class="nav-link mr-lg-2" href="#notificationTable">
+            <i class="fa fa-fw fa-bell"></i>
+
+              <span class="badge badge-pill badge-danger" id="newNot">0</span>
+          </a>
+        </li>
+
+     
+      </ul>
+
+
+      <ul class="navbar-nav  ml-auto">
+          <li class="nav-item">
+              <b class="nav-link" style="color: white;" id="liveClock"></b>
+         </li>
+          <li class="nav-item ml-auto">
+              <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+                <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+          </li>
+
+      </ul>
+    </div>
+  </nav>
+
+
+<!-- Navbar chhodke baki sab content-wraper me jayega************************************************** -->
+
+  <div class="content-wrapper" style="background-color: rgb(242, 235, 235);">
+    <div class="container-fluid" style="margin: 10px 0px;">
+
+    <!-- First row************************************************************************ -->
+    <div class="row">
+            <div class="col-md-8 col-lg-8">
+              <div class="card map" id="map">
+                <div class="card-header">
+                  <i class="fa fa-location-arrow"></i> <b>Map</b></div>
+                <div class="card-body" id="mainMap">
+                  <h3 class="text-center" style="position: relative; top: 300px;">wegotyou.in</h3>
+                </div>
+                <div class="card-footer small text-muted">
+                    <b class="float-left">Distance : <span id="mainDistance">-----------</span> </b>
+                    <b class="float-right">Travel Time : <span id="mainTravelTime">-----------</span></b>
+                </div>
+              </div>  
+            </div>
+
+
+            <!-- DETAILS WALA CARD*************************** -->
+            <div class="col-md-4 col-lg-4">
+              <div class="card details" id="details">
+                <div class="card-header">
+                  <i class="fa fa-info-circle"></i> <b>Details</b>
+                </div>
+                <div class="card-body">
+
+                    <table class="table table-borderless" style="font-size: 1em">
+                        <tbody>
+
+                          <tr>
+                            <th class="text-right">Situation : </th>
+                            <td class="text-left" id="situation">-----------</td>
+                          </tr>
+                          <tr>
+                              <th class="text-right">Location : </th>
+                              <td class="text-left" id="mainLocation">-----------</td>
+                          </tr>
+                          <tr>
+                              <th class="text-right">Time : </th>
+                              <td class="text-left" id="mainTime">-----------</td>
+                          </tr>
+                          <tr>
+                            <th class="text-right">Vehicle Owner : </th>
+                            <td class="text-left" id="ownerName">-----------</td>
+                          </tr>
+                          <tr>
+                            <th class="text-right">Mobile : </th>
+                            <td class="text-left" id="mainMobile">-----------</td>
+                          </tr>
+                          <tr>
+                              <th class="text-right">Vehical No e </th>
+                              <td class="text-left" id="carNo">-----------</td>
+                          </tr>
+                          <tr>
+                              <th class="text-right">Vehical coleur : </th>
+                              <td class="text-left" id="carColor">-----------</td>
+                          </tr>
+                          <tr>
+                              <th class="text-right">Vehical Model : </th>
+                              <td class="text-left" id="carModel">-----------</td>
+                          </tr>                    
+                        </tbody>
+                      </table>
+
+                </div>
+              </div>
+            </div>
+          </div>
+    <!-- First row ends here **************MAP WALI ROW*****************************  -->
+
+    <br>
+
+
+    <!-- SECOND ROW START HERE *****************TABLE WALI ROW********************** -->
+        <div  id="notificationTable" style="background-color:white;">
+                <br>
+
+                    <h3 style="text-align: center;" class="text-center text-danger">Emergency Log</h3 style="text-align: center;">
+            <br>
+
+            <div class="row">
+                <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Situation</th>
+                            <th>Location</th>
+                            <th>Time</th>
+                            <th>Distance</th>
+                            <th>Travel Time</th>
+                            <th>Owner Name</th>
+                            <th>Mobile Number</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Situation</th>
+                            <th>Location</th>
+                            <th>Time</th>
+                            <th>Distance</th>
+                            <th>Travel Time</th>
+                            <th>Owner Name</th>
+                            <th>Mobile Number</th>
+                            <th>Action</th>
+                        </tr>
+                    </tfoot>
+                    <tbody id="emLogTbody">
+ 
+                        <!-- The table rows  willl be appedded -->
+                        
+                    </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+        
+        </div>
+        
+    </div>
+
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+    <footer class="sticky-footer bg-dark">
+      <div class="container">
+        <div class="text-center">
+          <small class="text-red">© wegotyou.in 2018</small>
+        </div>
+      </div>
+    </footer>
+
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+
+
+
+    <!-- Logout Modal ++++++++++++++++++++++++++++++++++ -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">If you logout. You automatic login won't work!</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <button onclick="logout();"class="btn btn-primary">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Logout Modal ends here ++++++++++++++++++++++++++++++++++ -->
+
+
+
+
+  </div>
+  <!-- Content-Wraper ends here**upar*************************************************************************************************** -->
+
+</div>
+
+
+<!-- NOTIFICATION SOUND ************************************************************************ -->
+<audio id="notificationSound" allow="autoplay">
+  <source src="sounds/notify.ogg" type="audio/ogg">
+</audio>
+
+
+
+
+<!--******************************* Authentication message window *******************************-->
+
+<div style="color:#f94808" id="authenticationMessage" hidden >
+  <p class="display-1 text-center"><b>:( Authentication required</b></p>
+  <br>
+  <p class="text-center">Please visit <a href="index.html">index.html</a> page...</p>
+</div>
+<!-- Authentication message ends here************************************************************ -->
+  
+
+
+
+    
+</body>
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+        <!-- Page level plugin JavaScript-->
+        <script src="vendor/datatables/jquery.dataTables.js"></script>
+        <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
+        <script src="js/sb-admin-datatables.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin.js"></script>
+
+<script>
+    function startTime() {
+        var today = new Date();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        h = checkTime(h);
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById('liveClock').innerHTML =
+        "Time : "+h + ":" + m + ":" + s;
+        var t = setTimeout(startTime, 500);
+    }
+    function checkTime(i) {
+        if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+        return i;
+    }
+    </script>
+
+<script src="../admin/custom/js/fetchNotifications.js"></script>
+
+<script>
+
+
+
+  function initMap(mapDiv, origin, destination) {
+    var directionsService = new google.maps.DirectionsService;
+    var directionsDisplay = new google.maps.DirectionsRenderer;
+    var map = new google.maps.Map(mapDiv, {
+      zoom: 7,
+      center: origin
+    });
+    directionsDisplay.setMap(map);
+
+    directionsService.route({
+      origin: origin,
+      destination: destination,
+      travelMode: 'DRIVING'
+    }, function(response, status) {
+      if (status === 'OK') {
+        directionsDisplay.setDirections(response);
+      } else {
+        mapDiv.innerHTML = 'Directions request failed due to ' + status;
+      }
+    });
+  }
+</script>
+
+
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-T_nIRGhX2QPlgkOM5xmocn94qIDOgz0">
+</script>
+
+
+
+</html>

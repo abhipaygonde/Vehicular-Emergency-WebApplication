@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Login | WeGotYou</title>
+    <!-- favicon -->
+    <link rel="icon" href="images/smile.gif" type="image/gif">
+
+  <!-- Bootstrap core CSS-->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom fonts for this template-->
+  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
+</head>
+
+<body style="background-color:rgb(31, 32, 34)" onload="autoLogin()">
+  <div class="container">
+
+
+<!-- ********************************************LOGIN CARD*********************************************** -->
+    <div class="card card-login mx-auto mt-5" id="loginCard" hidden>
+      <div class="card-header text-center display-4"><i class="fa fa-user"></i> Login</div>
+      <div class="card-body">
+          <div class="form-group">
+            <label for="useraname">Username</label>
+            <input class="form-control" id="username" type="text" placeholder="Username">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input class="form-control" id="password" type="password" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" id="remember" checked>Keep me logged in</label>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-block" onclick="login();">Login</button>
+        <div class="text-center">
+          <a class="d-block small mt-3" href="register.html">Register an Account</a>
+          <!-- <a class="d-block small" href="forgot-password.html">Forgot Password?</a> -->
+        </div>
+      </div>
+    </div>
+
+<!-- *****************************************END OF LOGIN CARD******************************************** -->
+
+
+
+<!-- *****************************************AUTO REDIRECT************************************************ -->
+<div id="loader">
+<div class="lds-facebook"  style="top: 250px; left: 45%;"><div></div><div></div><div></div></div>
+<h3 class="" style="position : relative; top: 270px; text-align: center; z-index: 500; color: white" id="redirectDialog">wegotyou.in</h3>
+</div>
+
+<!-- *************************************END OF AUTO REDIRECT********************************************* -->
+
+  </div>
+
+
+
+
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script>
+
+
+//MANUAL LOGIN **************************************************************
+    function login(){
+      var username = document.getElementById("username").value;
+      var password = document.getElementById("password").value;
+      var remember = document.getElementById("remember").checked;
+
+      if(username == "" || password == ""){
+        var err = true;
+      }else{
+       var err = false;
+      }
+
+      if(err == true){
+        alert("Please fill all the fields");
+        return;
+
+      }
+      else{
+            var obj = {
+                      "username" : username,
+                      "password" : password,
+                      "remember"  :  remember
+                  };
+
+            dbParam = JSON.stringify(obj);
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var myObj = JSON.parse(this.responseText);
+                    if(myObj["Status"] == "Success"){
+
+                          if(myObj["RescueType"] == "hospital" || myObj["RescueType"] == "carworkshop"){
+                           
+                                window.location.replace("dashboard.html");
+                                
+                          }
+                          else{
+                           
+                                window.location.replace("adminpanel.html");
+
+                          }
+                        }else if(myObj["Status"] == "Failure"){
+
+                          alert("FAILED");
+                          
+                    }
+                }
+            };
+            var url = "php/login.php";
+            xmlhttp.open("POST", url, true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send("x=" + dbParam);
+    }
+}
+
+
+
+//AUTO LOGIN**************************************************************************************
+function autoLogin(){
+
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var myObj = JSON.parse(this.responseText);
+                    if(myObj["Status"] == "Success"){
+                          document.getElementById("redirectDialog").innerHTML = "Welcome Back :)";
+                          if(myObj["RescueType"] == "hospital" || myObj["RescueType"] == "carworkshop"){
+                            window.location.replace("dashboard.html");
+                          }
+                          else{
+                            window.location.replace("adminpanel.html");
+                          }
+                        }else if(myObj["Status"] == "Failure"){
+                          document.getElementById("loader").hidden = true;
+                          document.getElementById("loginCard").hidden = false;                          
+                    }
+                }
+            };
+            var url = "php/login.php";
+            xmlhttp.open("GET", url, true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send();
+}
+
+
+
+</script>
+
+
+
+
+
+
+</body>
+
+</html>
