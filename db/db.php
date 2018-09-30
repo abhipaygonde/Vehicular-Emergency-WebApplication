@@ -2,10 +2,10 @@
 
     class db{
         //Proprties
-        private $dbhost = 'localhost';
-        private $dbuser = 'id6154337_sachin123';
-        private $dbpass = 'sachin123';
-        private $dbname = 'id6154337_project';
+        private $dbhost = '';
+        private $dbuser = '';
+        private $dbpass = '';
+        private $dbname = '';
 
         //Connect
         public function connect(){
